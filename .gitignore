@@ -1,8 +1,31 @@
+# Logs
+logs
+*.log*
+
+# Deps
 /bower_components/
 /node_modules/
-/.pulp-cache/
+
+# Artifacts
 /output/
 /generated-docs/
+
+# Env
+*.local
+.env
+.envrc
+
+# Editors
+.vscode
+.idea
+.nova
+
+# Misc
+.DS_Store
+.nix-*
+
+# Others
+/.pulp-cache/
 /.psc-package/
 /.psc*
 /.purs*
