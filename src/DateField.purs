@@ -40,7 +40,7 @@ type CastFn = (DateTime -> Either DateTime String)
 
 type ComputeFn = (DateTime -> DateTime)
 
-type ValidateFn = (DateTime -> Either ValidationMessage Unit)
+type ValidateFn = (DateTime -> Maybe ValidationMessage)
 
 -- | UI validation message displayed to the user in a table cell.
 -- | Messages should be 'user friendly'.

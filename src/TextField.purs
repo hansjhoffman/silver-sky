@@ -42,7 +42,7 @@ type CastFn = (String -> Either String String)
 
 type ComputeFn = (String -> String)
 
-type ValidateFn = (String -> Either ValidationMessage Unit)
+type ValidateFn = (String -> Maybe ValidationMessage)
 
 -- | UI validation message displayed to the user in a table cell.
 -- | Messages should be 'user friendly'.

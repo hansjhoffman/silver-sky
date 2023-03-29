@@ -2,43 +2,41 @@ module Main where
 
 import Prelude
 
-import Data.Array.NonEmpty as NEA
-import Data.DateTime as DateTime
-import Data.Either (Either(..))
+-- import Data.Array.NonEmpty as NEA
+-- import Data.DateTime as DateTime
 import Data.Int as Int
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), isJust)
 import Data.String as Str
 import DateField as DF
 import Effect (Effect)
 import Effect.Console as Console
 import NumberField as NF
-import OptionField as OF
-import Sheet as SH
-import SpaceConfig as SC
+-- import OptionField as OF
+-- import Sheet as SH
+-- import SpaceConfig as SC
 import TextField as TF
-import Workbook as WB
+-- import Workbook as WB
 
-ensureMaxLength :: Int -> String -> Either TF.ValidationMessage Unit
+ensureMaxLength :: Int -> String -> Maybe TF.ValidationMessage
 ensureMaxLength maxLen val =
   if Str.length val > maxLen then
-    Left $ TF.ErrorMsg ("Cannot be more than " <> Int.toStringAs Int.decimal maxLen <> " characters.")
+    Just $ TF.ErrorMsg ("Cannot be more than " <> Int.toStringAs Int.decimal maxLen <> " characters.")
   else
-    Right unit
+    Nothing
 
-ensureValidEmail :: String -> Either TF.ValidationMessage Unit
+ensureValidEmail :: String -> Maybe TF.ValidationMessage
 ensureValidEmail val =
-  case Str.indexOf (Str.Pattern "@") val of
-    Just _ ->
-      Right unit
-    Nothing ->
-      Left $ TF.ErrorMsg "Invalid email address."
+  if isJust $ Str.indexOf (Str.Pattern "@") val then
+    Nothing
+  else
+    Just $ TF.ErrorMsg "Invalid email address."
 
-ensureValidSchoolGrade :: Number -> Either NF.ValidationMessage Unit
+ensureValidSchoolGrade :: Number -> Maybe NF.ValidationMessage
 ensureValidSchoolGrade val =
   if val < Int.toNumber 0 || val > Int.toNumber 12 then
-    Left $ NF.ErrorMsg "Grades can only be 1-12"
+    Just $ NF.ErrorMsg "Grades can only be 1-12"
   else
-    Right unit
+    Nothing
 
 main :: Effect Unit
 main = do
@@ -75,7 +73,7 @@ main = do
   let
     dob =
       DF.withDescription "Date of Birth"
-      $ DF.mkDateField "Date of Birth"
+        $ DF.mkDateField "Date of Birth"
 
   -- let
   --   role =
