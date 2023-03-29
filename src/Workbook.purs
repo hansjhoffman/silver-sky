@@ -4,6 +4,7 @@ module Workbook
   ) where
 
 import Prelude
+
 import Data.Array.NonEmpty (NonEmptyArray)
 import Sheet (Sheet)
 

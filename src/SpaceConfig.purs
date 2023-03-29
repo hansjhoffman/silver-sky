@@ -5,6 +5,7 @@ module SpaceConfig
   ) where
 
 import Prelude
+
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Eq.Generic (genericEq)
 import Data.Generic.Rep (class Generic)

@@ -16,6 +16,7 @@ module TextField
   ) where
 
 import Prelude
+
 import Data.Either (Either)
 import Data.Eq.Generic (genericEq)
 import Data.Generic.Rep (class Generic)
@@ -35,13 +36,13 @@ newtype TextField = TextField
   }
 
 instance showTextField :: Show TextField where
-  show (TextField tf) = "(TextField '" <> tf.displayName <> "')"
+  show (TextField field) = "(TextField '" <> field.displayName <> "')"
 
 type CastFn = (String -> Either String String)
 
 type ComputeFn = (String -> String)
 
-type ValidateFn = (String -> Either String ValidationMessage)
+type ValidateFn = (String -> Either ValidationMessage Unit)
 
 -- | UI validation message displayed to the user in a table cell.
 -- | Messages should be 'user friendly'.
@@ -76,50 +77,50 @@ mkTextField val = TextField
 -- | Parse the given value into a special string.
 -- | @since 0.0.1
 withCast :: CastFn -> TextField -> TextField
-withCast fn (TextField tf) =
-  TextField $ tf { cast = Just fn }
+withCast fn (TextField field) =
+  TextField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- | @since 0.0.1
 withCompute :: ComputeFn -> TextField -> TextField
-withCompute fn (TextField tf) =
-  TextField $ tf { compute = Just fn }
+withCompute fn (TextField field) =
+  TextField $ field { compute = Just fn }
 
 -- | Sets a default value when none was provided by the user.
 -- | @since 0.0.1
 withDefault :: String -> TextField -> TextField
-withDefault val (TextField tf) =
-  TextField $ tf { defaultValue = Just val }
+withDefault val (TextField field) =
+  TextField $ field { defaultValue = Just val }
 
 -- | Sets the value in the UI table the user will see when they hover their mouse over the column header.
 -- | @since 0.0.1
 withDescription :: String -> TextField -> TextField
-withDescription val (TextField tf) =
-  TextField $ tf { description = Just val }
+withDescription val (TextField field) =
+  TextField $ field { description = Just val }
 
 -- | Ensures a user cannot edit the value.
 -- | @since 0.0.1
 withReadonly :: TextField -> TextField
-withReadonly (TextField tf) =
-  TextField $ tf { isReadonly = true }
+withReadonly (TextField field) =
+  TextField $ field { isReadonly = true }
 
 -- | Ensures a field must have a value otherwise an error message will be present.
 -- | @since 0.0.1
 withRequired :: TextField -> TextField
-withRequired (TextField tf) =
-  TextField $ tf { isRequired = true }
+withRequired (TextField field) =
+  TextField $ field { isRequired = true }
 
 -- | Ensures a value is unique in the entire column.
 -- | @since 0.0.1
 withUnique :: TextField -> TextField
-withUnique (TextField tf) =
-  TextField $ tf { isUnique = true }
+withUnique (TextField field) =
+  TextField $ field { isUnique = true }
 
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- | @since 0.0.1
 withValidate :: ValidateFn -> TextField -> TextField
-withValidate fn (TextField tf) =
-  TextField $ tf { validate = Just fn }
+withValidate fn (TextField field) =
+  TextField $ field { validate = Just fn }
 
 -- build :: TextField -> Scalar
 -- build =

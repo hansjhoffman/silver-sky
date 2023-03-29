@@ -13,6 +13,7 @@ module NumberField
   ) where
 
 import Prelude
+
 import Data.Either (Either)
 import Data.Eq.Generic (genericEq)
 import Data.Generic.Rep (class Generic)
@@ -32,13 +33,13 @@ newtype NumberField = NumberField
   }
 
 instance showNumberField :: Show NumberField where
-  show (NumberField nf) = "(NumberField '" <> nf.displayName <> "')"
+  show (NumberField field) = "(NumberField '" <> field.displayName <> "')"
 
 type CastFn = (Number -> Either Number String)
 
 type ComputeFn = (Number -> Number)
 
-type ValidateFn = (Number -> Either Number ValidationMessage)
+type ValidateFn = (Number -> Either ValidationMessage Unit)
 
 -- | UI validation message displayed to the user in a table cell.
 -- | Messages should be 'user friendly'.
@@ -73,47 +74,47 @@ mkNumberField val = NumberField
 -- | Parse the given value into a special string.
 -- | @since 0.0.1
 withCast :: CastFn -> NumberField -> NumberField
-withCast fn (NumberField nf) =
-  NumberField $ nf { cast = Just fn }
+withCast fn (NumberField field) =
+  NumberField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- | @since 0.0.1
 withCompute :: ComputeFn -> NumberField -> NumberField
-withCompute fn (NumberField nf) =
-  NumberField $ nf { compute = Just fn }
+withCompute fn (NumberField field) =
+  NumberField $ field { compute = Just fn }
 
 -- | Sets a default value when none was provided by the user.
 -- | @since 0.0.1
 withDefault :: Number -> NumberField -> NumberField
-withDefault val (NumberField nf) =
-  NumberField $ nf { defaultValue = Just val }
+withDefault val (NumberField field) =
+  NumberField $ field { defaultValue = Just val }
 
 -- | Sets the value in the UI table the user will see when they hover their mouse over the column header.
 -- | @since 0.0.1
 withDescription :: String -> NumberField -> NumberField
-withDescription val (NumberField nf) =
-  NumberField $ nf { description = Just val }
+withDescription val (NumberField field) =
+  NumberField $ field { description = Just val }
 
 -- | Ensures a user cannot edit the value.
 -- | @since 0.0.1
 withReadonly :: NumberField -> NumberField
-withReadonly (NumberField nf) =
-  NumberField $ nf { isReadonly = true }
+withReadonly (NumberField field) =
+  NumberField $ field { isReadonly = true }
 
 -- | Ensures a field must have a value otherwise an error message will be present.
 -- | @since 0.0.1
 withRequired :: NumberField -> NumberField
-withRequired (NumberField nf) =
-  NumberField $ nf { isRequired = true }
+withRequired (NumberField field) =
+  NumberField $ field { isRequired = true }
 
 -- | Ensures a value is unique in the entire column.
 -- | @since 0.0.1
 withUnique :: NumberField -> NumberField
-withUnique (NumberField nf) =
-  NumberField $ nf { isUnique = true }
+withUnique (NumberField field) =
+  NumberField $ field { isUnique = true }
 
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- | @since 0.0.1
 withValidate :: ValidateFn -> NumberField -> NumberField
-withValidate fn (NumberField nf) =
-  NumberField $ nf { validate = Just fn }
+withValidate fn (NumberField field) =
+  NumberField $ field { validate = Just fn }

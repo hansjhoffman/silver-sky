@@ -13,6 +13,7 @@ module DateField
   ) where
 
 import Prelude
+
 import Data.DateTime (DateTime)
 import Data.Either (Either)
 import Data.Eq.Generic (genericEq)
@@ -33,13 +34,13 @@ newtype DateField = DateField
   }
 
 instance showDateField :: Show DateField where
-  show (DateField df) = "(DateField '" <> df.displayName <> "')"
+  show (DateField field) = "(DateField '" <> field.displayName <> "')"
 
 type CastFn = (DateTime -> Either DateTime String)
 
 type ComputeFn = (DateTime -> DateTime)
 
-type ValidateFn = (DateTime -> Either DateTime ValidationMessage)
+type ValidateFn = (DateTime -> Either ValidationMessage Unit)
 
 -- | UI validation message displayed to the user in a table cell.
 -- | Messages should be 'user friendly'.
@@ -74,47 +75,47 @@ mkDateField val = DateField
 -- | Parse the given value into a special string.
 -- | @since 0.0.1
 withCast :: CastFn -> DateField -> DateField
-withCast fn (DateField df) =
-  DateField $ df { cast = Just fn }
+withCast fn (DateField field) =
+  DateField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- | @since 0.0.1
 withCompute :: ComputeFn -> DateField -> DateField
-withCompute fn (DateField df) =
-  DateField $ df { compute = Just fn }
+withCompute fn (DateField field) =
+  DateField $ field { compute = Just fn }
 
 -- | Sets a default value when none was provided by the user.
 -- | @since 0.0.1
 withDefault :: DateTime -> DateField -> DateField
-withDefault val (DateField df) =
-  DateField $ df { defaultValue = Just val }
+withDefault val (DateField field) =
+  DateField $ field { defaultValue = Just val }
 
 -- | Sets the value in the UI table the user will see when they hover their mouse over the column header.
 -- | @since 0.0.1
 withDescription :: String -> DateField -> DateField
-withDescription val (DateField df) =
-  DateField $ df { description = Just val }
+withDescription val (DateField field) =
+  DateField $ field { description = Just val }
 
 -- | Ensures a user cannot edit the value.
 -- | @since 0.0.1
 withReadonly :: DateField -> DateField
-withReadonly (DateField df) =
-  DateField $ df { isReadonly = true }
+withReadonly (DateField field) =
+  DateField $ field { isReadonly = true }
 
 -- | Ensures a field must have a value otherwise an error message will be present.
 -- | @since 0.0.1
 withRequired :: DateField -> DateField
-withRequired (DateField df) =
-  DateField $ df { isRequired = true }
+withRequired (DateField field) =
+  DateField $ field { isRequired = true }
 
 -- | Ensures a value is unique in the entire column.
 -- | @since 0.0.1
 withUnique :: DateField -> DateField
-withUnique (DateField df) =
-  DateField $ df { isUnique = true }
+withUnique (DateField field) =
+  DateField $ field { isUnique = true }
 
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- | @since 0.0.1
 withValidate :: ValidateFn -> DateField -> DateField
-withValidate fn (DateField df) =
-  DateField $ df { validate = Just fn }
+withValidate fn (DateField field) =
+  DateField $ field { validate = Just fn }

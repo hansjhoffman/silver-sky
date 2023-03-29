@@ -6,6 +6,7 @@ module Sheet
   ) where
 
 import Prelude
+
 import Data.Array.NonEmpty (NonEmptyArray)
 import DateField (DateField)
 import NumberField (NumberField)
