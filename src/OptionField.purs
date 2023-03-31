@@ -19,6 +19,7 @@ newtype OptionField = OptionField
   , isRequired :: Boolean
   , matchStrategy :: MatchStrategy
   -- , options :: {_internal :: String} -- Maybe use type JSON.Value?
+  -- , options :: forall r . Homogenous r String -- https://pursuit.purescript.org/packages/purescript-typelevel-prelude/7.0.0/docs/Type.Row.Homogeneous
   }
 
 instance showOptionField :: Show OptionField where

@@ -8,13 +8,14 @@ module Sheet
 import Prelude
 
 import Data.Array.NonEmpty (NonEmptyArray)
+import Data.Tuple (Tuple)
 import DateField (DateField)
 import NumberField (NumberField)
 import TextField (TextField)
 
 newtype Sheet = Sheet
   { displayName :: String
-  , fields :: NonEmptyArray Scalar
+  , fields :: NonEmptyArray (Tuple String Scalar)
   , isReadonly :: Boolean
   }
 
@@ -28,7 +29,7 @@ data Scalar
 
 -- | Creates a simple sheet.
 -- | @since 0.0.1
-mkSheet :: String -> NonEmptyArray Scalar -> Sheet
+mkSheet :: String -> NonEmptyArray (Tuple String Scalar) -> Sheet
 mkSheet displayName fields = Sheet
   { displayName: displayName
   , fields: fields

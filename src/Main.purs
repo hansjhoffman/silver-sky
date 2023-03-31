@@ -2,41 +2,45 @@ module Main where
 
 import Prelude
 
--- import Data.Array.NonEmpty as NEA
--- import Data.DateTime as DateTime
+import Data.Array.NonEmpty as NEA
 import Data.Int as Int
-import Data.Maybe (Maybe(..), isJust)
+import Data.Maybe (Maybe(..))
 import Data.String as Str
+import Data.Tuple (Tuple(..))
 import DateField as DF
 import Effect (Effect)
 import Effect.Console as Console
 import NumberField as NF
--- import OptionField as OF
--- import Sheet as SH
--- import SpaceConfig as SC
+import Sheet as SH
+import SpaceConfig as SC
 import TextField as TF
--- import Workbook as WB
+import Workbook as WB
 
 ensureMaxLength :: Int -> String -> Maybe TF.ValidationMessage
 ensureMaxLength maxLen val =
   if Str.length val > maxLen then
-    Just $ TF.ErrorMsg ("Cannot be more than " <> Int.toStringAs Int.decimal maxLen <> " characters.")
+    Just $ TF.ErrorMsg $ "Cannot be more than "
+      <> Int.toStringAs Int.decimal maxLen
+      <> " characters."
   else
     Nothing
 
 ensureValidEmail :: String -> Maybe TF.ValidationMessage
 ensureValidEmail val =
-  if isJust $ Str.indexOf (Str.Pattern "@") val then
-    Nothing
-  else
+  if not Str.contains (Str.Pattern "@") val then
     Just $ TF.ErrorMsg "Invalid email address."
+  else
+    Nothing
 
 ensureValidSchoolGrade :: Number -> Maybe NF.ValidationMessage
 ensureValidSchoolGrade val =
   if val < Int.toNumber 0 || val > Int.toNumber 12 then
-    Just $ NF.ErrorMsg "Grades can only be 1-12"
+    Just $ NF.ErrorMsg "Grades can only be 1-12."
   else
     Nothing
+
+-- https://qiita.com/kimagure/items/581c63707673db61e061
+-- alternate approach to builder pattern using unions for partial properties
 
 main :: Effect Unit
 main = do
@@ -128,17 +132,17 @@ main = do
         $ TF.withDescription "Classroom Descriptor"
         $ TF.mkTextField "Classroom Descriptor"
 
-  -- let
-  --   sheet :: SH.Sheet
-  --   sheet = SH.mkSheet "School Districts" $ NEA.singleton firstName
+  let
+    sheet :: SH.Sheet
+    sheet = SH.mkSheet "School Districts" $ NEA.singleton (Tuple "firstName" $ SH.TScalar userId)
 
-  -- let
-  --   workbook :: WB.Workbook
-  --   workbook = WB.mkWorkbook "School Districts Workbook" $ NEA.singleton sheet
+  let
+    workbook :: WB.Workbook
+    workbook = WB.mkWorkbook "School Districts Workbook" $ NEA.singleton sheet
 
-  -- let
-  --   spaceConfig :: SC.SpaceConfig
-  --   spaceConfig = SC.mkSpaceConfig "School Districts v1" $ NEA.singleton workbook
+  let
+    spaceConfig :: SC.SpaceConfig
+    spaceConfig = SC.mkSpaceConfig "School Districts v1" $ NEA.singleton workbook
 
   Console.logShow userId
   Console.logShow givenName
@@ -153,4 +157,7 @@ main = do
   Console.logShow siteId
   Console.logShow classroomId
   Console.logShow classroomDescriptor
+  Console.logShow sheet
+  Console.logShow workbook
+  Console.logShow spaceConfig
 -- Console.log "🍝"
