@@ -123,7 +123,6 @@ data EventTopic
 -- instance decodeJsonEventTopic :: DecodeJson EventTopic where
 --   decodeJson json = do
 
-
 -- | Creates an agent.
 createAgent :: Reader AppContext (Agent)
 createAgent = do

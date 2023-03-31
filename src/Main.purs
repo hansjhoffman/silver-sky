@@ -6,7 +6,6 @@ import Data.Array.NonEmpty as NEA
 import Data.Int as Int
 import Data.Maybe (Maybe(..))
 import Data.String as Str
-import Data.Tuple (Tuple(..))
 import DateField as DF
 import Effect (Effect)
 import Effect.Console as Console
@@ -134,15 +133,31 @@ main = do
 
   let
     sheet :: SH.Sheet
-    sheet = SH.mkSheet "School Districts" $ NEA.singleton (Tuple "firstName" $ SH.TScalar userId)
+    sheet =
+      SH.mkSheet "School Districts"
+        [ SH.useTextField "user_id" userId
+        , SH.useTextField "given_name" givenName
+        , SH.useTextField "middle_name" middleName
+        , SH.useTextField "family_name" familyName
+        , SH.useDateField "dob" dob
+        , SH.useTextField "email" email
+        , SH.useTextField "phone" phone
+        , SH.useTextField "username" username
+        , SH.useNumberField "grade" grade
+        , SH.useTextField "site_id" siteId
+        , SH.useTextField "classroom_id" classroomId
+        , SH.useTextField "classroom_descriptor" classroomDescriptor
+        ]
 
   let
     workbook :: WB.Workbook
-    workbook = WB.mkWorkbook "School Districts Workbook" $ NEA.singleton sheet
+    workbook = WB.mkWorkbook "School Districts Workbook"
+      $ NEA.singleton sheet
 
   let
     spaceConfig :: SC.SpaceConfig
-    spaceConfig = SC.mkSpaceConfig "School Districts v1" $ NEA.singleton workbook
+    spaceConfig = SC.mkSpaceConfig "School Districts v1"
+      $ NEA.singleton workbook
 
   Console.logShow userId
   Console.logShow givenName
