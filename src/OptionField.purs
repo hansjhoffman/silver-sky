@@ -2,6 +2,7 @@ module OptionField
   ( OptionField
   , MatchStrategy(..)
   , mkOptionField
+  , useOption
   , withDefault
   , withDescription
   , withMatchStrategy
@@ -11,6 +12,7 @@ module OptionField
 import Prelude
 
 import Data.Maybe (Maybe(..))
+import Data.Tuple (Tuple(..))
 
 newtype OptionField = OptionField
   { defaultValue :: Maybe String
@@ -20,6 +22,7 @@ newtype OptionField = OptionField
   , matchStrategy :: MatchStrategy
   -- , options :: {_internal :: String} -- Maybe use type JSON.Value?
   -- , options :: forall r . Homogenous r String -- https://pursuit.purescript.org/packages/purescript-typelevel-prelude/7.0.0/docs/Type.Row.Homogeneous
+  , options :: Array (Tuple String String)
   }
 
 instance showOptionField :: Show OptionField where
@@ -31,15 +34,19 @@ data MatchStrategy
 
 -- | Creates an OptionField
 -- | @since 0.0.1
-mkOptionField :: String -> OptionField
-mkOptionField val = OptionField
+mkOptionField :: String -> Array (Tuple String String) -> OptionField
+mkOptionField val opts = OptionField
   { defaultValue: Nothing
   , description: Nothing
   , displayName: val
   , isRequired: false
   , matchStrategy: FuzzyMatch
-  -- , options: opts
+  , options: opts
   }
+
+useOption :: String -> String -> Tuple String String
+useOption key val =
+  Tuple key val
 
 -- | Sets a default value when none was provided by the user.
 -- | @since 0.0.1

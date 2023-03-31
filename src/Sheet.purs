@@ -5,6 +5,7 @@ module Sheet
   , withReadonly
   , useDateField
   , useNumberField
+  , useOptionField
   , useTextField
   ) where
 
@@ -13,6 +14,7 @@ import Prelude
 import Data.Tuple (Tuple(..))
 import DateField (DateField)
 import NumberField (NumberField)
+import OptionField (OptionField)
 import TextField (TextField)
 
 newtype Sheet = Sheet
@@ -29,6 +31,7 @@ instance showSheet :: Show Sheet where
 data Scalar
   = DScalar DateField
   | NScalar NumberField
+  | OScalar OptionField
   | TScalar TextField
 
 useDateField :: String -> DateField -> Tuple String Scalar
@@ -38,6 +41,10 @@ useDateField key field =
 useNumberField :: String -> NumberField -> Tuple String Scalar
 useNumberField key field =
   Tuple key $ NScalar field
+
+useOptionField :: String -> OptionField -> Tuple String Scalar
+useOptionField key field =
+  Tuple key $ OScalar field
 
 useTextField :: String -> TextField -> Tuple String Scalar
 useTextField key field =

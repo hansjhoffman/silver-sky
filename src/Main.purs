@@ -10,6 +10,7 @@ import DateField as DF
 import Effect (Effect)
 import Effect.Console as Console
 import NumberField as NF
+import OptionField as OF
 import Sheet as SH
 import SpaceConfig as SC
 import TextField as TF
@@ -78,11 +79,13 @@ main = do
       DF.withDescription "Date of Birth"
         $ DF.mkDateField "Date of Birth"
 
-  -- let
-  --   role =
-  --     -- OF.withOptions {admin: "Admin", student: "Student", teacher: "Teacher"}
-  --       OF.withRequired
-  --       $ OF.mkOptionField "Role" {admin: "Admin", student: "Student", teacher: "Teacher"}
+  let
+    role =
+      OF.mkOptionField "Role"
+        [ OF.useOption "admin" "Admin"
+        , OF.useOption "student" "Student"
+        , OF.useOption "teacher" "Teacher"
+        ]
 
   let
     email =
@@ -140,6 +143,7 @@ main = do
         , SH.useTextField "middle_name" middleName
         , SH.useTextField "family_name" familyName
         , SH.useDateField "dob" dob
+        , SH.useOptionField "role" role
         , SH.useTextField "email" email
         , SH.useTextField "phone" phone
         , SH.useTextField "username" username
@@ -164,7 +168,7 @@ main = do
   Console.logShow middleName
   Console.logShow familyName
   Console.logShow dob
-  -- Console.logShow role
+  Console.logShow role
   Console.logShow email
   Console.logShow phone
   Console.logShow username
