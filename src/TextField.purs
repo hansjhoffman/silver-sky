@@ -1,9 +1,5 @@
 module TextField
   ( TextField
-  , ValidationMessage(..)
-  , CastFn
-  , ComputeFn
-  , ValidateFn
   , mkTextField
   , withCast
   , withCompute
@@ -17,47 +13,23 @@ module TextField
 
 import Prelude
 
-import Data.Either (Either)
-import Data.Eq.Generic (genericEq)
-import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe(..))
-import Data.Show.Generic (genericShow)
+import Types (CastFn, ComputeFn, ValidateFn)
 
 newtype TextField = TextField
-  { cast :: Maybe CastFn
-  , compute :: Maybe ComputeFn
+  { cast :: Maybe (CastFn String)
+  , compute :: Maybe (ComputeFn String)
   , defaultValue :: Maybe String
   , description :: Maybe String
   , displayName :: String
   , isReadonly :: Boolean
   , isRequired :: Boolean
   , isUnique :: Boolean
-  , validate :: Maybe ValidateFn
+  , validate :: Maybe (ValidateFn String)
   }
 
 instance showTextField :: Show TextField where
   show (TextField field) = "(TextField '" <> field.displayName <> "')"
-
-type CastFn = (String -> Either String String)
-
-type ComputeFn = (String -> String)
-
-type ValidateFn = (String -> Maybe ValidationMessage)
-
--- | UI validation message displayed to the user in a table cell.
--- | Messages should be 'user friendly'.
-data ValidationMessage
-  = ErrorMsg String
-  | InfoMsg String
-  | WarnMsg String
-
-derive instance Generic ValidationMessage _
-
-instance Eq ValidationMessage where
-  eq = genericEq
-
-instance Show ValidationMessage where
-  show = genericShow
 
 -- | Creates a simple, empty TextField.
 -- |
@@ -78,14 +50,14 @@ mkTextField val = TextField
 -- | Parse the given value into a special string.
 -- |
 -- | @since 0.0.1
-withCast :: CastFn -> TextField -> TextField
+withCast :: CastFn String -> TextField -> TextField
 withCast fn (TextField field) =
   TextField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- |
 -- | @since 0.0.1
-withCompute :: ComputeFn -> TextField -> TextField
+withCompute :: ComputeFn String -> TextField -> TextField
 withCompute fn (TextField field) =
   TextField $ field { compute = Just fn }
 
@@ -127,6 +99,6 @@ withUnique (TextField field) =
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- |
 -- | @since 0.0.1
-withValidate :: ValidateFn -> TextField -> TextField
+withValidate :: ValidateFn String -> TextField -> TextField
 withValidate fn (TextField field) =
   TextField $ field { validate = Just fn }

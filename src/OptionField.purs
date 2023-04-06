@@ -1,6 +1,6 @@
 module OptionField
-  ( OptionField
-  , MatchStrategy(..)
+  ( MatchStrategy(..)
+  , OptionField
   , mkOptionField
   , useOption
   , withDefault

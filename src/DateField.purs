@@ -1,6 +1,5 @@
 module DateField
   ( DateField
-  , ValidationMessage(..)
   , mkDateField
   , withCast
   , withCompute
@@ -15,47 +14,23 @@ module DateField
 import Prelude
 
 import Data.DateTime (DateTime)
-import Data.Either (Either)
-import Data.Eq.Generic (genericEq)
-import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe(..))
-import Data.Show.Generic (genericShow)
+import Types (CastFn, ComputeFn, ValidateFn)
 
 newtype DateField = DateField
-  { cast :: Maybe CastFn
-  , compute :: Maybe ComputeFn
+  { cast :: Maybe (CastFn DateTime)
+  , compute :: Maybe (ComputeFn DateTime)
   , defaultValue :: Maybe DateTime
   , description :: Maybe String
   , displayName :: String
   , isReadonly :: Boolean
   , isRequired :: Boolean
   , isUnique :: Boolean
-  , validate :: Maybe ValidateFn
+  , validate :: Maybe (ValidateFn DateTime)
   }
 
 instance showDateField :: Show DateField where
   show (DateField field) = "(DateField '" <> field.displayName <> "')"
-
-type CastFn = (DateTime -> Either DateTime String)
-
-type ComputeFn = (DateTime -> DateTime)
-
-type ValidateFn = (DateTime -> Maybe ValidationMessage)
-
--- | UI validation message displayed to the user in a table cell.
--- | Messages should be 'user friendly'.
-data ValidationMessage
-  = ErrorMsg String
-  | InfoMsg String
-  | WarnMsg String
-
-derive instance Generic ValidationMessage _
-
-instance Eq ValidationMessage where
-  eq = genericEq
-
-instance Show ValidationMessage where
-  show = genericShow
 
 -- | Creates a simple, empty DateField.
 -- |
@@ -76,14 +51,14 @@ mkDateField val = DateField
 -- | Parse the given value into a special string.
 -- |
 -- | @since 0.0.1
-withCast :: CastFn -> DateField -> DateField
+withCast :: CastFn DateTime -> DateField -> DateField
 withCast fn (DateField field) =
   DateField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- |
 -- | @since 0.0.1
-withCompute :: ComputeFn -> DateField -> DateField
+withCompute :: ComputeFn DateTime -> DateField -> DateField
 withCompute fn (DateField field) =
   DateField $ field { compute = Just fn }
 
@@ -125,6 +100,6 @@ withUnique (DateField field) =
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- |
 -- | @since 0.0.1
-withValidate :: ValidateFn -> DateField -> DateField
+withValidate :: ValidateFn DateTime -> DateField -> DateField
 withValidate fn (DateField field) =
   DateField $ field { validate = Just fn }

@@ -15,27 +15,28 @@ import Sheet as SH
 import SpaceConfig as SC
 import TextField as TF
 import Workbook as WB
+import Types (ValidationMessage(..))
 
-ensureMaxLength :: Int -> String -> Maybe TF.ValidationMessage
+ensureMaxLength :: Int -> String -> Maybe ValidationMessage
 ensureMaxLength maxLen val =
   if Str.length val > maxLen then
-    Just $ TF.ErrorMsg $ "Cannot be more than "
+    Just $ ErrorMsg $ "Cannot be more than "
       <> Int.toStringAs Int.decimal maxLen
       <> " characters."
   else
     Nothing
 
-ensureValidEmail :: String -> Maybe TF.ValidationMessage
+ensureValidEmail :: String -> Maybe ValidationMessage
 ensureValidEmail val =
   if not Str.contains (Str.Pattern "@") val then
-    Just $ TF.ErrorMsg "Invalid email address."
+    Just $ ErrorMsg "Invalid email address."
   else
     Nothing
 
-ensureValidSchoolGrade :: Number -> Maybe NF.ValidationMessage
+ensureValidSchoolGrade :: Number -> Maybe ValidationMessage
 ensureValidSchoolGrade val =
   if val < Int.toNumber 0 || val > Int.toNumber 12 then
-    Just $ NF.ErrorMsg "Grades can only be 1-12."
+    Just $ ErrorMsg "Grades can only be 1-12."
   else
     Nothing
 

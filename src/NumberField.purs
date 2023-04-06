@@ -1,6 +1,5 @@
 module NumberField
   ( NumberField
-  , ValidationMessage(..)
   , mkNumberField
   , withCast
   , withCompute
@@ -14,47 +13,23 @@ module NumberField
 
 import Prelude
 
-import Data.Either (Either)
-import Data.Eq.Generic (genericEq)
-import Data.Generic.Rep (class Generic)
 import Data.Maybe (Maybe(..))
-import Data.Show.Generic (genericShow)
+import Types (CastFn, ComputeFn, ValidateFn)
 
 newtype NumberField = NumberField
-  { cast :: Maybe CastFn
-  , compute :: Maybe ComputeFn
+  { cast :: Maybe (CastFn Number)
+  , compute :: Maybe (ComputeFn Number)
   , defaultValue :: Maybe Number
   , description :: Maybe String
   , displayName :: String
   , isReadonly :: Boolean
   , isRequired :: Boolean
   , isUnique :: Boolean
-  , validate :: Maybe ValidateFn
+  , validate :: Maybe (ValidateFn Number)
   }
 
 instance showNumberField :: Show NumberField where
   show (NumberField field) = "(NumberField '" <> field.displayName <> "')"
-
-type CastFn = (Number -> Either Number String)
-
-type ComputeFn = (Number -> Number)
-
-type ValidateFn = (Number -> Maybe ValidationMessage)
-
--- | UI validation message displayed to the user in a table cell.
--- | Messages should be 'user friendly'.
-data ValidationMessage
-  = ErrorMsg String
-  | InfoMsg String
-  | WarnMsg String
-
-derive instance Generic ValidationMessage _
-
-instance Eq ValidationMessage where
-  eq = genericEq
-
-instance Show ValidationMessage where
-  show = genericShow
 
 -- | Creates a simple, empty NumberField.
 -- |
@@ -75,14 +50,14 @@ mkNumberField val = NumberField
 -- | Parse the given value into a special string.
 -- |
 -- | @since 0.0.1
-withCast :: CastFn -> NumberField -> NumberField
+withCast :: CastFn Number -> NumberField -> NumberField
 withCast fn (NumberField field) =
   NumberField $ field { cast = Just fn }
 
 -- | Change the current value into something new.
 -- |
 -- | @since 0.0.1
-withCompute :: ComputeFn -> NumberField -> NumberField
+withCompute :: ComputeFn Number -> NumberField -> NumberField
 withCompute fn (NumberField field) =
   NumberField $ field { compute = Just fn }
 
@@ -124,6 +99,6 @@ withUnique (NumberField field) =
 -- | Validate the current value against certain conditions and display a message to the user when those conditions are not met.
 -- |
 -- | @since 0.0.1
-withValidate :: ValidateFn -> NumberField -> NumberField
+withValidate :: ValidateFn Number -> NumberField -> NumberField
 withValidate fn (NumberField field) =
   NumberField $ field { validate = Just fn }
