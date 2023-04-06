@@ -51,6 +51,7 @@ useTextField key field =
   Tuple key $ TScalar field
 
 -- | Creates a simple sheet.
+-- |
 -- | @since 0.0.1
 -- mkSheet :: String -> NonEmptyArray (Tuple String Scalar) -> Sheet
 mkSheet :: String -> Array (Tuple String Scalar) -> Sheet
@@ -61,6 +62,7 @@ mkSheet displayName fields = Sheet
   }
 
 -- | Ensures a user cannot edit any value in the entire sheet.
+-- |
 -- | @since 0.0.1
 withReadonly :: Sheet -> Sheet
 withReadonly (Sheet sheet) =

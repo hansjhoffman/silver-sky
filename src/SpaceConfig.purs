@@ -33,6 +33,7 @@ instance Show Slug where
   show = genericShow
 
 -- | Creates a re-usable Space Config
+-- |
 -- | @since 0.0.1
 mkSpaceConfig :: String -> NonEmptyArray Workbook -> SpaceConfig
 mkSpaceConfig name workbooks = SpaceConfig
@@ -42,6 +43,7 @@ mkSpaceConfig name workbooks = SpaceConfig
   }
 
 -- | Overwrites the default slug with a custom slug.
+-- |
 -- | @since 0.0.1
 withSlug :: String -> SpaceConfig -> SpaceConfig
 withSlug val (SpaceConfig sc) =

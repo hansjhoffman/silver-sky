@@ -42,12 +42,20 @@ clean: ## Remove build artifacts
 build: ## Make a production build
 	spago build
 
+.PHONY: bundle
+bundle: ## Bundle
+	spago bundle-app --main Main --to dist/index.js
+
 # Development targets
 # -------------------
 
 .PHONY: deps
 deps: ## Install all dependencies
 	echo "todo"
+
+.PHONY: docs
+docs: ## Generate docs
+	spago docs --open
 
 .PHONY: run
 run: ## Run web app

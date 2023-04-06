@@ -3,6 +3,7 @@ let
   pkgs = import sources.nixpkgs { };
 
   basePackages = [
+    pkgs.esbuild
     pkgs.spago
     pkgs.nodePackages.purs-tidy
     pkgs.nodePackages.purescript-language-server

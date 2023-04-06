@@ -7,6 +7,7 @@ logs
 /node_modules/
 
 # Artifacts
+/dist
 /output/
 /generated-docs/
 
