@@ -41,6 +41,7 @@ ensureValidSchoolGrade val =
 
 -- https://qiita.com/kimagure/items/581c63707673db61e061
 -- alternate approach to builder pattern using unions for partial properties
+-- use comonad? https://kodimensional.dev/posts/2019-03-25-comonadic-builders
 
 main :: Effect Unit
 main = do

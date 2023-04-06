@@ -121,7 +121,3 @@ withUnique (TextField field) =
 withValidate :: ValidateFn -> TextField -> TextField
 withValidate fn (TextField field) =
   TextField $ field { validate = Just fn }
-
--- build :: TextField -> Scalar
--- build =
---   TScalar
